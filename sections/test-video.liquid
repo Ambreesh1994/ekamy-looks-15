@@ -1,0 +1,85 @@
+<!-- test-video.liquid -->
+
+<div class="container">
+  {% for block in section.blocks %}
+    <div class="row mb-4">
+      <div class="col text-center" id="popup_{{ forloop.index }}">
+        {% assign popsrc = block.settings.video_link %}
+        <a
+          href="#"
+          class="btn btn-lg btn-success amb_content"
+          data-toggle="modal"
+          data-target="#basicModal"
+          data_src="https://www.youtube.com/embed/{{ popsrc}}"
+        >
+          {{ block.settings.btn_name -}}
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="modal-body youtube-video">
+        <iframe class="amb_data_id" src="" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+     $(document).on('click', '.amb_content' , function(){
+        var amb_video =  $(this).attr('data_src');
+       console.log(amb_video);
+        $('.amb_data_id').attr('src', amb_video);
+     });
+
+      $('.close').on('click', function(e){
+        e.preventDefault();
+         $('.amb_data_id').attr('src','')
+      });
+   });
+</script>
+
+{% schema %}
+{
+  "name": "Test Video",
+  "settings": [],
+  "blocks":[
+    {
+      "type":"button",
+      "name":"Button",
+      "settings":[
+        {
+          "type":"text",
+          "id":"btn_name",
+          "label":"Buton Name",
+          "default":"Click Me"
+        },
+        {
+          "type": "text",
+          "id":"video_link",
+          "label": "Video Link"
+        }
+      ]
+    }
+  ],
+  "presets":[
+    {
+      "name":"Test Video"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

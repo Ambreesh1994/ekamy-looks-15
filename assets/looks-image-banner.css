@@ -1,0 +1,12 @@
+.looks-medium {
+  height: 75vh;
+  object-fit:cover;
+  object-position:center top;
+  width: 100%;
+}
+.looks-large {
+  height: 100vh;
+  object-fit:cover;
+  object-position:center top;
+  width: 100%;
+}

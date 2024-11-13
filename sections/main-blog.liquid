@@ -1,0 +1,207 @@
+<!-- main-blog.liquid -->
+
+{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="main-blog section-{{ section.id }}-padding">
+  <div class="container">
+    <h1 class="title--primary text-center">{{ blog.title | escape }}</h1>
+    <div class="row">
+      {% assign blog_list = section.settings.blog_categroy | split: ',' %}
+      {% assign blog_handle_new = '' %}
+      {% if section.settings.enable_filter %}
+        <div class="col-md-4 blog-filters">
+          <div class="category fill_acc">
+            <h3 class="fill_title">Category</h3>
+            <div class="fill_blockContent">
+              <ul class="blog-category">
+                <li>
+                  <a href="/blogs/{{ blog.handle }}">
+                    {{ blog.handle | capitalize }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tags fill_acc">
+            {% assign has_tags = false %}
+            {% for blog_handle in blog_list %}
+              {% assign blog_handle_new = blog_handle | handle %}
+              {% if blogs[blog_handle_new].all_tags.size > 0 %}
+                {% assign has_tags = true %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+
+            {% if has_tags %}
+              <h3 class="fill_title">TAGS</h3>
+              <div class="fill_blockContent">
+                <ul class="tag_list">
+                  {% for blog_handle in blog_list %}
+                    {% assign blog_handle_new = blog_handle | handle %}
+                    {% for tag in blogs[blog_handle_new].all_tags %}
+                      <li>
+                        <a class="tags" href="/blogs/{{ blog_handle_new }}/tagged/{{ tag | handle }}">
+                          {{ tag | capitalize }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="fill_acc">
+            {% assign has_recent_posts = false %}
+
+            {% for blog_handle in blog_list %}
+              {% assign blog_handle_new = blog_handle | handle %}
+              {% assign recent_articles = blogs[blog_handle_new].articles %}
+              {% if recent_articles.size > 0 %}
+                {% assign has_recent_posts = true %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+            {% if has_recent_posts %}
+              <h3 class="fill_title">RECENT POST</h3>
+              <ul class="recent-post">
+                {% for article in recent_articles %}
+                  <li class="rec_list">
+                    <h4>
+                      <a href="{{ article.url }}">
+                        <!-- Corrected blog link -->
+                        {{ article.title | truncate: 50 | escape }}
+                      </a>
+                    </h4>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="{% if section.settings.enable_filter == false %}col-md-12{% else %}col-md-8{% endif %}">
+        {%- paginate blog.articles by 6 -%}
+          <div class="blog-articles {% if section.settings.layout == 'collage' %}blog-articles--collage{% endif %}">
+            {% for article in blog.articles %}
+              <div
+                class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                {% if settings.animations_reveal_on_scroll %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {%- render 'article-card',
+                  article: article,
+                  media_height: section.settings.image_height,
+                  media_aspect_ratio: article.image.aspect_ratio,
+                  show_image: section.settings.show_image,
+                  show_date: section.settings.show_date,
+                  show_author: section.settings.show_author,
+                  show_excerpt: true
+                -%}
+              </div>
+            {% endfor %}
+          </div>
+          {% if paginate.pages > 1 %}
+            {% render 'pagination', paginate: paginate %}
+          {% endif %}
+        {%- endpaginate -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+ "name": "t:sections.main-blog.name",
+ "tag": "section",
+ "class": "section",
+ "settings": [
+  {
+    "type": "header",
+    "content": "Blog Filter Settings"
+  },
+  {
+    "type":"textarea",
+    "id":"blog_categroy",
+    "label":"Blog Categroy",
+     "info":"Here You add the name of the blog that you have created in your Shopify."
+  },
+  {
+    "type":"checkbox",
+    "id":"enable_filter",
+    "label":"Enable Filter",
+    "default":true
+  },
+  {
+    "type":"checkbox",
+    "id":"enable_btn",
+    "label":"Enable Read More Button",
+    "default":true,
+    "info":"In articles show/hide read more button"
+  },
+  {
+    "type": "header",
+    "content": "t:sections.main-blog.settings.header.content"
+  },
+  {
+    "type": "select",
+    "id": "layout",
+    "options": [
+      {
+        "value": "grid",
+        "label": "t:sections.main-blog.settings.layout.options__1.label"
+      },
+      {
+        "value": "collage",
+        "label": "t:sections.main-blog.settings.layout.options__2.label"
+      }
+    ],
+   "default": "collage",
+   "label": "t:sections.main-blog.settings.layout.label",
+   "info": "t:sections.main-blog.settings.layout.info"
+  },
+  {
+    "type": "checkbox",
+    "id": "show_image",
+    "default": true,
+    "label": "t:sections.main-blog.settings.show_image.label"
+  },
+  {
+    "type": "checkbox",
+    "id": "show_date",
+    "default": true,
+    "label": "t:sections.main-blog.settings.show_date.label"
+  },
+  {
+    "type": "checkbox",
+    "id": "show_author",
+    "default": false,
+    "label": "t:sections.main-blog.settings.show_author.label"
+  },
+  {
+    "type": "paragraph",
+    "content": "t:sections.main-blog.settings.paragraph.content"
+  }
+ ]
+}
+{% endschema %}

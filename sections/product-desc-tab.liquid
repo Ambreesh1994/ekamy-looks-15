@@ -1,0 +1,149 @@
+<!-- product-desc-tab.liquid -->
+<div class="container">
+  <div class="product-tabbing">
+    <ul class="nav nav-tabs" role="tablist">
+      {% if section.settings.enable_tab1 %}
+        {% if section.settings.tab1 != blank %}
+          <li class="nav-item">
+            <a class="nav-link active" id="tab-1-{{ section.id }}" data-toggle="tab" href="#tabs-1" role="tab">
+              {{- section.settings.tab1 -}}
+            </a>
+          </li>
+        {% endif %}
+      {% endif %}
+      {% if section.settings.enable_tab2 %}
+        {% if section.settings.tab2 != blank %}
+          <li class="nav-item">
+            <a class="nav-link" id="tab-2-{{ section.id }}" data-toggle="tab" href="#tabs-2" role="tab">
+              {{- section.settings.tab2 -}}
+            </a>
+          </li>
+        {% endif %}
+      {% endif %}
+      {% if section.settings.enable_tab3 %}
+        {% if section.settings.tab3 != blank %}
+          <li class="nav-item">
+            <a class="nav-link" id="tab-3-{{ section.id }}" data-toggle="tab" href="#tabs-3" role="tab">
+              {{- section.settings.tab3 -}}
+            </a>
+          </li>
+        {% endif %}
+      {% endif %}
+    </ul>
+
+    <div class="tab-content">
+      {% if section.settings.enable_tab1 %}
+        {% if section.settings.tab1 != blank %}
+          <div class="tab-pane active" id="tabs-1" role="tabpanel">
+            {{ product.description }}
+          </div>
+        {% endif %}
+      {% endif %}
+      {% if section.settings.enable_tab2 %}
+        {% if section.settings.tab2 != blank %}
+          <div class="tab-pane" id="tabs-2" role="tabpanel">
+            <span>
+              {{ section.settings.content_tab2 }}
+            </span>
+          </div>
+        {% endif %}
+      {% endif %}
+      {% if section.settings.enable_tab3 %}
+        {% if section.settings.tab3 != blank %}
+          <div class="tab-pane" id="tabs-3" role="tabpanel">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when '@app' -%}
+                  {% render block %}
+              {% endcase %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Description Tab",
+  "settings": [
+    {
+      "type":"checkbox",
+      "id":"enable_tab1",
+      "label":"Enable Tab 1",
+      "info":"You can enable or disable tab 1 from here"
+    },
+    {
+      "type":"richtext",
+      "id":"tab1",
+      "label":"Tab 1 Name",
+      "info":"You can customize the tab 1 name from here"
+    },
+    {
+      "type":"checkbox",
+      "id":"enable_tab2",
+      "label":"Enable Tab 2",
+      "info":"You can enable or disable tab 2 from here"
+    },
+    {
+      "type":"richtext",
+      "id":"tab2",
+      "label":"Tab 2 Name",
+      "info":"You can customize the tab 2 name from here"
+    },
+    {
+      "type":"richtext",
+      "id":"content_tab2",
+      "label":"Add data here",
+      "info":"This tab cotent is customizable you can add here content as per your requirement"
+    },
+    {
+      "type":"checkbox",
+      "id":"enable_tab3",
+      "label":"Enable Tab 3",
+      "info":"You can enable or disable tab 3 from here"
+    },
+    {
+      "type":"richtext",
+      "id":"tab3",
+      "label":"Tab 3 Name",
+      "info":"You can customize the tab 3 name from here"
+    }
+
+  ],
+  "blocks":[
+   {
+    "type": "@app"
+   }
+  ],
+  "presets":[
+    {
+      "name":"Description tab"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const urlParams = window.location.href;
+    if(urlParams != null )
+    var href = '.ekamy_reviews';
+    $('.ekamy_reviews').click(function(){
+        $( 'html, body' ).animate({
+            scrollTop: $('#shopify-section-template--17014127198421__7d1f09d3-e416-4311-8bdc-6e46351657c5').offset().top
+        }, '500' );
+
+       $('.nav-link , .tab-pane').removeClass('active');
+       $('#tab-3-template--17014127198421__7d1f09d3-e416-4311-8bdc-6e46351657c5, #tabs-3').addClass('active');
+     e.preventDefault();
+    });
+  });
+</script>

@@ -1,0 +1,124 @@
+<!-- looks-instagram-sec.liquid -->
+
+<div class="instagram">
+  <div class="content {{ section.settings.content_position }}">
+    <h2>{{ section.settings.heading }}</h2>
+    <p>{{ section.settings.paragraph }}</p>
+  </div>
+  <div class="row">
+    {% for block in section.blocks %}
+      <div class="col-md-2">
+        {% assign image_data = block.settings.image %}
+        {% if image_data != blank %}
+          <img
+            srcset="
+              {% if image_data.width >= 350 %}{{ image_data | image_url: width: 350 }} 350w,{% endif %}
+              {% if image_data.width >= 750 %}{{ image_data | image_url: width: 750 }} 750w,{% endif %}
+              {% if image_data.width >= 1100 %}{{ image_data | image_url: width: 1100 }} 1100w,{% endif %}
+              {% if image_data.width >= 1500 %}{{ image_data | image_url: width: 1500 }} 1500w,{% endif %}
+              {% if image_data.width >= 2200 %}{{ image_data | image_url: width: 2200 }} 2200w,{% endif %}
+              {% if image_data.width >= 3000 %}{{ image_data | image_url: width: 3000 }} 3000w,{% endif %}
+              {{ image_data | image_url }} {{ image_data.width }}w
+            "
+            sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 }}px, (min-width: 750px) calc(100vw - 10rem), 100vw"
+            src="{{ image_data | image_url: width: 1100 }}"
+            loading="lazy"
+            preload="true"
+            width="{{ image_data.width }}"
+            height="{{ image_data.height }}"
+            alt="{{ image_data.alt | escape }}"
+          >
+          <a target="_blank" href="{{ block.settings.insta_link }}">{% render 'instagram-svg' %} </a>
+        {% else %}
+          {%- assign placeholder_slide = forloop.index | modulo: 6 -%}
+          {%- if placeholder_slide == 1 -%}
+            {{ 'product-1' | placeholder_svg_tag }}
+            <a target="_blank" href="{{ block.settings.insta_link }}">{% render 'instagram-svg' %} </a>
+          {%- elsif placeholder_slide == 2 -%}
+            {{ 'product-2' | placeholder_svg_tag }}
+            <a target="_blank" href="{{ block.settings.insta_link }}">{% render 'instagram-svg' %} </a>
+          {%- elsif placeholder_slide == 3 -%}
+            {{ 'product-3' | placeholder_svg_tag }}
+            <a target="_blank" href="{{ block.settings.insta_link }}">{% render 'instagram-svg' %} </a>
+          {%- elsif placeholder_slide == 4 -%}
+            {{ 'product-4' | placeholder_svg_tag }}
+            <a target="_blank" href="{{ block.settings.insta_link }}">{% render 'instagram-svg' %} </a>
+          {%- elsif placeholder_slide == 5 -%}
+            {{ 'product-5' | placeholder_svg_tag }}
+            <a target="_blank" href="{{ block.settings.insta_link }}">{% render 'instagram-svg' %} </a>
+          {%- else -%}
+            {{ 'product-6' | placeholder_svg_tag }}
+            <a target="_blank" href="{{ block.settings.insta_link }}">{% render 'instagram-svg' %} </a>
+          {%- endif -%}
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Instagram Section",
+  "settings": [
+    {
+      "type":"text",
+      "id":"heading",
+      "label":"Heading"
+    },
+    {
+      "type":"richtext",
+      "id":"paragraph",
+      "label":"Paragraph"
+    },
+    {
+      "type":"select",
+      "id":"content_position",
+      "options":[
+        {
+          "value":"justify-content-start text-left",
+          "label":"Left"
+        },
+        {
+          "value":"justify-content-center text-center",
+          "label":"Center"
+        },
+        {
+          "value":"justify-content-end text-right",
+          "label":"Right"
+        }
+      ],
+      "default":"justify-content-center text-center",
+      "label":"Content Position"
+    }
+  ],
+  "blocks":[
+    {
+      "type":"instagram_details",
+      "name":"Image & Icons",
+      "settings":[
+        {
+          "type":"image_picker",
+          "id":"image",
+          "label":"Image"
+        },
+        {
+          "type":"url",
+          "id":"insta_link",
+          "label":"Instagram Link"
+        }
+      ]
+    }
+  ],
+  "presets":[
+    {
+      "name":"Instagram Section"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,40 @@
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+      $(".slider_main_banner").slick({
+        dots: {{ section.settings.dots }},
+        infinite: {{ section.settings.infinite }},
+        speed: {{ section.settings.slider_speed }},
+        autoplay: {{ section.settings.autoplay }},
+        arrows: {{ section.settings.arrow }},
+        slidesToShow: {{ section.settings.slides_count }},
+        slidesToScroll: 1,
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: {{ section.settings.slides_count }},
+              slidesToScroll: 1,
+              infinite: {{ section.settings.infinite }},
+              dots: {{ section.settings.dots }}
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 1
+            }
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1
+            }
+          }         
+        ]
+      });
+   
+    });  
+
+    </script> 

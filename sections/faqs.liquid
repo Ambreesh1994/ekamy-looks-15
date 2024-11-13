@@ -1,0 +1,103 @@
+<!-- faqs.liquid -->
+
+<div class="faq_page">
+ <div class="container">
+  <div class="row">
+   <div class="col-md-6">
+    {% if section.settings.left_title != blank %}
+     <div class="column-1-title"> <h2>{{ section.settings.left_title }}</h2> </div>
+    {% endif %}
+    {% for block in section.blocks %}
+     {% if block.type == 'first_column' %}
+      <div class="faq_block">
+       <div class="faq-qustion">{{ block.settings.question }}</div>
+       <div class="faq-answer">{{ block.settings.answer }}</div>
+      </div>
+     {% endif %}
+    {% endfor %}
+   </div>
+   <div class="col-md-6">
+    {% if section.settings.right_title != blank %}
+     <div class="column-2-title">
+      <h2>{{ section.settings.right_title }}</h2>
+     </div>
+    {% endif %}
+    {% for block in section.blocks %}
+     {% if block.type == 'second_column' %}
+      <div class="faq_block"> 
+       {% if block.settings.question != blank %} 
+        <div class="faq-qustion">{{ block.settings.question }}</div>
+       {% endif %}
+       {% if block.settings.answer != blank %} 
+        <div class="faq-answer">{{ block.settings.answer }}</div>
+       {% endif %}
+      </div>
+     {% endif %}
+    {% endfor %}
+   </div>
+  </div>
+ </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQs",
+  "settings": [
+    {
+      "type":"richtext",
+      "id":"left_title",
+      "label":"Column 1 title"
+    },
+    {
+      "type":"richtext",
+      "id":"right_title",
+      "label":"Column 2 title"
+    }
+  ],
+  "blocks":[
+    {
+      "type":"first_column",
+      "name":"column 1 data",
+      "settings":[
+        {
+          "type":"richtext",
+          "id":"question",
+          "label":"Question"
+        },
+        {
+          "type":"richtext",
+          "id":"answer",
+          "label":"Answer"
+        }
+      ]
+    },
+    {
+      "type":"second_column",
+      "name":"column 2 data",
+      "settings":[
+        {
+          "type":"richtext",
+          "id":"question",
+          "label":"Question"
+        },
+        {
+          "type":"richtext",
+          "id":"answer",
+          "label":"Answer"
+        }
+      ]
+    }
+  ],
+  "presets":[
+    {
+      "name":"FAQ's"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
